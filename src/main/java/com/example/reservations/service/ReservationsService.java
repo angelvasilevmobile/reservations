@@ -99,17 +99,6 @@ public class ReservationsService {
 		return reservationResponse;
 	}
 
-	private String toJson(ReservationResponse reservationResponse) {
-		String json = null;
-		try {
-			json = objectMapper.writeValueAsString(reservationResponse);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return json;
-	}
-
 	public ReservationResponse addBeverages(Long reservationId, List<Long> beveragesIds) {
 		ReservationResponse response = new ReservationResponse();
 		try {
@@ -133,13 +122,22 @@ public class ReservationsService {
 	}
 
 	public ReservationResponse findReservation(Long reservationId) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<ReservationEntity> reservation = repository.findById(reservationId);
+		return new ReservationResponse(reservation.get());
 	}
 
-	public ReservationResponse deleteReservation(Long reservationId) {
-		// TODO Auto-generated method stub
-		return null;
+	public void deleteReservation(Long reservationId) {
+		repository.deleteById(reservationId);
 	}
 
+	private String toJson(ReservationResponse reservationResponse) {
+		String json = null;
+		try {
+			json = objectMapper.writeValueAsString(reservationResponse);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return json;
+	}
 }
